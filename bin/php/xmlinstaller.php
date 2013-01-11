@@ -133,7 +133,9 @@ if ( $xml == '' )
 }
 
 $dom = new DOMDocument( '1.0', 'utf-8' );
-if ( !$dom->loadXML( $xml ) )
+$dom->substituteExternals = true;
+
+if ( !$dom->loadXML( $xml, LIBXML_NOENT) )
 {
     $cli->error( "Failed to load XML." );
     $script->shutdown( 1 );
