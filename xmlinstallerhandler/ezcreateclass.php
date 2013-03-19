@@ -195,7 +195,6 @@ class eZCreateClass extends eZXMLInstallerHandler
                 $class = eZContentClass::create( $userID,
                                                 array( 'version' => 1,
                                                         'serialized_name_list' => $classNameList->serializeNames(),
-                                                        'serialized_description_list' => $classDescriptionList->serializeNames(),
                                                         'create_lang_if_not_exist' => true,
                                                         'identifier' => $classIdentifier,
                                                         'remote_id' => $classRemoteID,
