@@ -88,8 +88,8 @@ class eZCreateContent extends eZXMLInstallerHandler
             $objectInformation['ownerID'] = $objectNode->getAttribute( 'owner' );
             $objectInformation['creatorID'] = $objectNode->getAttribute( 'creator' );
             $objectInformation['attributes'] = array();
-            $objectInformation['sort_field'] = $objectNode->hasAttribute( 'sort_field' ) ? $objectNode->getAttribute( 'sort_field' ) : 'path';
-            $objectInformation['sort_order'] = $objectNode->hasAttribute( 'sort_order' ) ? $objectNode->getAttribute( 'sort_order' ) : 'asc';
+            $objectInformation['sort_field'] = $objectNode->hasAttribute( 'sortField' ) ? strtolower($objectNode->getAttribute('sortField')) : null;
+            $objectInformation['sort_order'] = $objectNode->hasAttribute( 'sortOrder' ) ? strtolower($objectNode->getAttribute('sortOrder')) : null;
 
             switch( $priorityMode )
             {
@@ -259,6 +259,18 @@ class eZCreateContent extends eZXMLInstallerHandler
         {
             $db->begin();
             $versionNumber  = $contentObjectVersion->attribute( 'version' );
+
+            // if sort is null use class defaults 
+            $itsClass = $contentObject->contentClass();
+            if (is_null($objectInformation['sort_field'])){
+                $objectInformation['sort_field'] = eZContentObjectTreeNode::sortFieldName($itsClass->SortField);
+
+            }
+
+            if (is_null($objectInformation['sort_order'])){
+                $objectInformation['sort_order'] = $itsClass->SortOrder  ? " ASC" : " DESC";
+            }
+
 
             $sortField = intval( eZContentObjectTreeNode::sortFieldID( $objectInformation['sort_field'] ) );
             $sortOrder = strtolower( $objectInformation['sort_order'] ) == 'desc' ? eZContentObjectTreeNode::SORT_ORDER_DESC : eZContentObjectTreeNode::SORT_ORDER_ASC;

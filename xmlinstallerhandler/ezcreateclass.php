@@ -63,6 +63,14 @@ class eZCreateClass extends eZXMLInstallerHandler
             $classIsContainer       = $class->getAttribute( 'isContainer' );
             if ( $classIsContainer !== false )
                 $classIsContainer = $classIsContainer == 'true' ? 1 : 0;
+            
+            $classSortOrder = $class->getAttribute('sortOrder');
+            if ( $classSortOrder !== false )
+                $classSortOrder = strtolower($classSortOrder) == 'asc' ? 1 : 0;
+             
+            $classSortFieldName = $class->getAttribute('sortField');
+            if ( $classSortFieldName !== false )
+                $classSortField = eZContentObjectTreeNode::sortFieldID($classSortFieldName);
 
             $classGroupsNode        = $class->getElementsByTagName( 'Groups' )->item( 0 );
             $classAttributesNode    = $class->getElementsByTagName( 'Attributes' )->item( 0 );
@@ -123,6 +131,8 @@ class eZCreateClass extends eZXMLInstallerHandler
                         $class->setAttribute( 'contentobject_name', $classObjectNamePattern );
                         $class->setAttribute( 'identifier', $classIdentifier );
                         $class->setAttribute( 'is_container', $classIsContainer );
+                        $class->setAttribute( 'sort_field', $classSortField );
+                        $class->setAttribute( 'sort_order', $classSortOrder );
                         $class->setAttribute( 'url_alias_name', $classURLAliasPattern );
 
                         $class->store();
@@ -147,6 +157,8 @@ class eZCreateClass extends eZXMLInstallerHandler
                         $class->setAttribute( 'contentobject_name', $classObjectNamePattern );
                         $class->setAttribute( 'identifier', $classIdentifier );
                         $class->setAttribute( 'is_container', $classIsContainer );
+                        $class->setAttribute( 'sort_field', $classSortField );
+                        $class->setAttribute( 'sort_order', $classSortOrder );
                         $class->setAttribute( 'url_alias_name', $classURLAliasPattern );
                         $class->store();
                     } break;
@@ -189,6 +201,8 @@ class eZCreateClass extends eZXMLInstallerHandler
                                                         'contentobject_name' => $classObjectNamePattern,
                                                         'url_alias_name' => $classURLAliasPattern,
                                                         'is_container' => $classIsContainer,
+                                                        'sort_field' => $classSortField,
+                                                        'sort_order' => $classSortOrder,
                                                         'created' => $classCreated,
                                                         'modified' => $classModified ) );
                 $class->store();
